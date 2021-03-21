@@ -34,7 +34,7 @@ public class PlayerShoot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (false)//Input.GetButtonDown("Fire1"))
         {
             if (bulletLeft > 0) Shoot();
             else ProcessReload();
