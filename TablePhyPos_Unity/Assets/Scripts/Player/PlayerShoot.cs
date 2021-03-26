@@ -13,7 +13,7 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] ParticleSystem fireShoot;
     [SerializeField] AudioClip shootSound;
 
-
+    PlayerController controls;
     AudioSource audioSource;
     int bulletPerMag = 1;
     int bulletLeft;
@@ -27,6 +27,12 @@ public class PlayerShoot : MonoBehaviour
             Debug.Log("No camera referenced");
             this.enabled = false;
         }
+        controls = new PlayerController();
+        controls.Gameplay.Fire.performed += ctx => {
+            if (bulletLeft > 0) Shoot();
+            else ProcessReload();
+        };
+        controls.Gameplay.Fire.Enable();
         bulletLeft = bulletPerMag;
         audioSource = GetComponent<AudioSource>();
     }

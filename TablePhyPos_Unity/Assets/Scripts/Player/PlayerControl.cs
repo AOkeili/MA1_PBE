@@ -18,7 +18,7 @@ public class PlayerControl : MonoBehaviour
     {
         move = GetComponent<PlayerMove>();
         controls = new PlayerController();
-        controls.Gameplay.Fire.performed += ctx => KillPlayer();
+       // controls.Gameplay.Fire.performed += ctx => KillPlayer();
         controls.Gameplay.Rotate.performed += ctx => playerRot = ctx.ReadValue<Vector2>();
         controls.Gameplay.Forward.performed += ctx => playerMove = ctx.ReadValue<Vector2>();
         controls.Gameplay.Forward.Enable();

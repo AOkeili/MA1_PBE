@@ -46,7 +46,34 @@ public class SensorManager : MonoBehaviour
     private FSMI_TopTablePositionPhysical m_platformPosition = new FSMI_TopTablePositionPhysical();
 
     static SensorManager instance;
+    void Start()
+    {
+        instance = this;
+        // Load ForceSeatMI library from ForceSeatPM installation directory
+        m_fsmi = new ForceSeatMI();
 
+        if (m_fsmi.IsLoaded())
+        {
+         
+
+            // Prepare data structure by clearing it and setting correct size
+            m_platformPosition.mask = 0;
+            m_platformPosition.structSize = (byte)Marshal.SizeOf(m_platformPosition);
+
+            m_platformPosition.state = FSMI_State.NO_PAUSE;
+
+            // Set fields that can be changed by demo application
+            m_platformPosition.mask = FSMI_POS_BIT.STATE | FSMI_POS_BIT.POSITION;
+
+            m_fsmi.BeginMotionControl();
+
+            SendDataToPlatform();
+        }
+        else
+        {
+            Debug.LogError("ForceSeatMI library has not been found!Please install ForceSeatPM.");
+        }
+    }
 
     void Update()
     {
@@ -61,6 +88,7 @@ public class SensorManager : MonoBehaviour
         m_platformPosition.pitch = -Mathf.Deg2Rad * m_pitch;
         m_platformPosition.heave = m_heave * 100;
 
+        Debug.Log("roll: " + m_platformPosition.roll + ", pitch: " + m_platformPosition.pitch + "heav : " + m_platformPosition.heave);
 
         // Send data to platform
         m_fsmi.SendTopTablePosPhy(ref m_platformPosition);
@@ -68,10 +96,7 @@ public class SensorManager : MonoBehaviour
 
     public static SensorManager Instance()
     {
-        if (instance == null)
-        {
-            instance = new SensorManager();
-        }
+       
         return instance;
     }
 
@@ -101,8 +126,7 @@ public class SensorManager : MonoBehaviour
             Debug.LogError("ForceSeatMI library has not been found!Please install ForceSeatPM.");
         }
     }
-
-    public void EndSimulation()
+     void OnDestroy()
     {
         if (m_fsmi.IsLoaded())
         {
@@ -111,9 +135,9 @@ public class SensorManager : MonoBehaviour
         }
     }
 
-    public void SendWalkSensation()
+    public void SendWalkSensation(float vertical)
     {
-        m_heave = 0.3f;
+        m_heave = Mathf.Clamp(vertical,0,DRAWING_HEAVE_MAX);
         m_roll = Mathf.Clamp(instance.m_platformPosition.roll - DRAWING_ROLL_STEP, DRAWING_ROLL_MIN, DRAWING_ROLL_MAX);
         m_pitch = 0f;
     }

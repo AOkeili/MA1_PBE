@@ -36,7 +36,7 @@ public class @PlayerController : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Fire"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""739eb3a9-cb2c-4369-8194-ba84b26dbdf9"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -110,7 +110,18 @@ public class @PlayerController : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""9c0f5257-d570-4c3c-a2c2-82d791422cbd"",
-                    ""path"": ""<HID::Logitech Logitech Extreme 3D>/button2"",
+                    ""path"": ""<Joystick>/trigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5b1d7c99-956e-40af-aea4-99eb422b9654"",
+                    ""path"": ""<HID::Logitech Logitech Extreme 3D>/button5"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
