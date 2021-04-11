@@ -1,14 +1,62 @@
-﻿public class Enemy : Player
+﻿using UnityEngine;
+
+public class Enemy : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] int maxHealth = 100;
+    [SerializeField] int currentHealth = 0;
+    [SerializeField] bool _isDead = false;
+    [SerializeField] HealthBar bar;
+    [SerializeField] Behaviour[] componentToDisable;
+
+    bool[] componentWasEnable;
+
     void Start()
     {
-
+        componentWasEnable = new bool[componentToDisable.Length];
+        for (int i = 0; i < componentWasEnable.Length; i++)
+        {
+            componentWasEnable[i] = componentToDisable[i].enabled;
+        }
+        setDefault();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
+    public void TakeDamage(int damage)
+    {
+        if (_isDead) return;
+        currentHealth = Mathf.Max(currentHealth - damage, 0);
+        
+        Debug.Log(transform.name + " - " + currentHealth);
+        bar.setHealthValue((float) currentHealth / (float) maxHealth);
+        if (currentHealth == 0) Die();
+    }
+    public bool isDead()
+    {
+        return _isDead;
+    }
+
+    void Die()
+    {
+        _isDead = true;
+        for (int i = 0; i < componentToDisable.Length; i++)
+        {
+            componentToDisable[i].enabled = false;
+        }
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = true;
+    }
+
+    public void setDefault()
+    {
+        _isDead = false;
+        currentHealth = maxHealth;
+
+        for (int i = 0; i < componentToDisable.Length; i++)
+        {
+            componentToDisable[i].enabled = componentWasEnable[i];
+        }
+
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = true;
     }
 }

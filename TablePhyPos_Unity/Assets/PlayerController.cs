@@ -49,6 +49,14 @@ public class @PlayerController : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""TestTakeDamage"",
+                    ""type"": ""Button"",
+                    ""id"": ""224d500b-c389-4f11-ac1a-178f37e024d9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -128,6 +136,28 @@ public class @PlayerController : IInputActionCollection, IDisposable
                     ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1b1126ed-2c47-4390-a819-bb71d00c0c37"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""04bab676-eb07-4ff8-9a04-fbf269cb471b"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TestTakeDamage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -140,6 +170,7 @@ public class @PlayerController : IInputActionCollection, IDisposable
         m_Gameplay_Rotate = m_Gameplay.FindAction("Rotate", throwIfNotFound: true);
         m_Gameplay_Fire = m_Gameplay.FindAction("Fire", throwIfNotFound: true);
         m_Gameplay_Kill = m_Gameplay.FindAction("Kill", throwIfNotFound: true);
+        m_Gameplay_TestTakeDamage = m_Gameplay.FindAction("TestTakeDamage", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -193,6 +224,7 @@ public class @PlayerController : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Rotate;
     private readonly InputAction m_Gameplay_Fire;
     private readonly InputAction m_Gameplay_Kill;
+    private readonly InputAction m_Gameplay_TestTakeDamage;
     public struct GameplayActions
     {
         private @PlayerController m_Wrapper;
@@ -201,6 +233,7 @@ public class @PlayerController : IInputActionCollection, IDisposable
         public InputAction @Rotate => m_Wrapper.m_Gameplay_Rotate;
         public InputAction @Fire => m_Wrapper.m_Gameplay_Fire;
         public InputAction @Kill => m_Wrapper.m_Gameplay_Kill;
+        public InputAction @TestTakeDamage => m_Wrapper.m_Gameplay_TestTakeDamage;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -222,6 +255,9 @@ public class @PlayerController : IInputActionCollection, IDisposable
                 @Kill.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKill;
                 @Kill.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKill;
                 @Kill.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKill;
+                @TestTakeDamage.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTestTakeDamage;
+                @TestTakeDamage.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTestTakeDamage;
+                @TestTakeDamage.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTestTakeDamage;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -238,6 +274,9 @@ public class @PlayerController : IInputActionCollection, IDisposable
                 @Kill.started += instance.OnKill;
                 @Kill.performed += instance.OnKill;
                 @Kill.canceled += instance.OnKill;
+                @TestTakeDamage.started += instance.OnTestTakeDamage;
+                @TestTakeDamage.performed += instance.OnTestTakeDamage;
+                @TestTakeDamage.canceled += instance.OnTestTakeDamage;
             }
         }
     }
@@ -248,5 +287,6 @@ public class @PlayerController : IInputActionCollection, IDisposable
         void OnRotate(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnKill(InputAction.CallbackContext context);
+        void OnTestTakeDamage(InputAction.CallbackContext context);
     }
 }

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackState : State
+public class EnemyAttack : MonoBehaviour
 {
-    public AttackStanceState attackStanceState;
+    ///public AttackStanceState attackStanceState;
 
-    public EnemyAttackAction[] enemyAttacks;
+   // public EnemyAttackAction[] enemyAttacks;
     public EnemyAttackAction currentAttack;
 
     public PlayerWeapon weapon;
@@ -23,7 +23,7 @@ public class AttackState : State
     int bulletLeft;
     float shootTimer;
 
-    public override State Tick(EnemyManager enemyManager, Enemy enemy, EnemyAnimationManager enemyAnimationManager)
+  /*  public override State Tick(EnemyManager enemyManager, Enemy enemy, EnemyAnimationManager enemyAnimationManager)
     {
         if (enemyManager.isPerformingAction) return attackStanceState;
         if (currentAttack != null)
@@ -56,25 +56,23 @@ public class AttackState : State
         return attackStanceState;
     }
 
-
+    */
     #region Attack
 
-    void AttackTarget(EnemyManager enemyManager, EnemyAnimationManager enemyAnimationManager)
+   /* void AttackTarget()
     {
-        enemyManager.enemyRigidBody.velocity = Vector3.zero;
-        enemyAnimationManager.animator.SetFloat(EnemyLocomotionManager.FORWARD_MOVE_ANIM, 0);
-
-        if (bulletLeft > 0) Shoot(enemyAnimationManager);
+       
+        if (bulletLeft > 0) Shoot();
         else { 
-            ProcessReload(enemyAnimationManager);
+            ProcessReload();
             Reload();
         }
         
         if (shootTimer < fireRates)
             shootTimer += Time.deltaTime;
 
-    }
-
+    }*/
+    /*
     void GetNewAttack(EnemyManager enemyManager)
     {
 
@@ -90,7 +88,7 @@ public class AttackState : State
                 currentAttack = enemyAttackAction;
             }
         }
-    }
+    }*/
 
     // Start is called before the first frame update
     void Start()
@@ -122,10 +120,10 @@ public class AttackState : State
             AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
         }*/
 
-    void Shoot(EnemyAnimationManager enemyAnimationManager)
+    public void Shoot()
     {
-        if (shootTimer < fireRates || bulletLeft <= 0) return;
 
+       
         RaycastHit hit;
         if (Physics.Raycast(enemyEyes.transform.position, enemyEyes.transform.forward, out hit, currentAttack.maximumDistanceNeededToAttack, mask))
         {
@@ -140,11 +138,8 @@ public class AttackState : State
             GameObject hitParticleEffect = Instantiate(hitParticules, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
             Destroy(hitParticleEffect, 1f);
         }
-        bulletLeft--;
         fireShoot.Play();
         PlayShootSound();
-        enemyAnimationManager.animator.CrossFadeInFixedTime("Fire", 0.1f);
-        shootTimer = 0f;
     }
 
     void PlayShootSound()

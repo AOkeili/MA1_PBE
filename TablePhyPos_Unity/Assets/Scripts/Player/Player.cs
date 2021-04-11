@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] int maxHealth = 100;
     [SerializeField] int currentHealth = 0;
     [SerializeField] bool _isDead = false;
+    [SerializeField] Text healthData;
     [SerializeField] Behaviour[] componentToDisable;
+
+    PlayerController inputActions;
 
     bool[] componentWasEnable;
 
@@ -16,6 +20,9 @@ public class Player : MonoBehaviour
         {
             componentWasEnable[i] = componentToDisable[i].enabled;
         }
+        inputActions = new PlayerController();
+        inputActions.Gameplay.TestTakeDamage.started += ctx => { TakeDamage(4); };
+        inputActions.Gameplay.TestTakeDamage.Enable();
         setDefault();
     }
 
@@ -25,7 +32,8 @@ public class Player : MonoBehaviour
         if (_isDead) return;
         currentHealth = Mathf.Max(currentHealth - damage, 0);
         Debug.Log(transform.name + " - " + currentHealth);
-
+        float healthRatio = ((float)currentHealth / (float)maxHealth) * 100;
+        healthData.text = "Shield : " + healthRatio + "%";
         if (currentHealth == 0) Die();
     }
     public bool isDead()

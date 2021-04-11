@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerShoot : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] Animator animator;
     [SerializeField] ParticleSystem fireShoot;
     [SerializeField] AudioClip shootSound;
+    [SerializeField] Text bulletCount;
 
     PlayerController controls;
     AudioSource audioSource;
@@ -31,6 +33,8 @@ public class PlayerShoot : MonoBehaviour
         controls.Gameplay.Fire.performed += ctx => {
             if (bulletLeft > 0) Shoot();
             else ProcessReload();
+            bulletCount.text = "Bullet : " + bulletLeft;
+
         };
         controls.Gameplay.Fire.Enable();
         bulletLeft = bulletPerMag;
@@ -91,5 +95,7 @@ public class PlayerShoot : MonoBehaviour
     public void Reload()
     {
         bulletLeft = 30;
+        bulletCount.text = "Bullet : " + bulletLeft;
+
     }
 }
