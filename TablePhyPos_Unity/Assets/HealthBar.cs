@@ -22,6 +22,6 @@ public class HealthBar : MonoBehaviour
     public void setHealthValue(float currentHealth)
     {
         slider.value = currentHealth;
-
+        if (currentHealth == 0) transform.parent.gameObject.SetActive(false);
     }
 }

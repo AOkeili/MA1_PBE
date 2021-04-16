@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     [SerializeField] bool _isDead = false;
     [SerializeField] Text healthData;
     [SerializeField] Behaviour[] componentToDisable;
+    [SerializeField] Light cockpitLight;
+    [SerializeField] Image blackScreen;
 
     PlayerController inputActions;
 
@@ -21,11 +23,20 @@ public class Player : MonoBehaviour
             componentWasEnable[i] = componentToDisable[i].enabled;
         }
         inputActions = new PlayerController();
-        inputActions.Gameplay.TestTakeDamage.started += ctx => { TakeDamage(4); };
+        inputActions.Gameplay.TestTakeDamage.started += ctx => { TakeDamage(100); };
         inputActions.Gameplay.TestTakeDamage.Enable();
+        blackScreen.canvasRenderer.SetAlpha(0f);
         setDefault();
     }
 
+
+    void Update()
+    {
+        if (_isDead)
+        {
+            cockpitLight.color = Color.Lerp(cockpitLight.color, Color.red, 0.02f);
+        }    
+    }
 
     public void TakeDamage(int damage)
     {
@@ -34,14 +45,17 @@ public class Player : MonoBehaviour
         Debug.Log(transform.name + " - " + currentHealth);
         float healthRatio = ((float)currentHealth / (float)maxHealth) * 100;
         healthData.text = "Shield : " + healthRatio + "%";
-        if (currentHealth == 0) Die();
+        if (currentHealth == 0) {
+            blackScreen.CrossFadeAlpha(1, 1, false);
+            Die();
+                };
     }
     public bool isDead()
     {
         return _isDead;
     }
 
-    void Die()
+    public void Die()
     {
         _isDead = true;
         for (int i = 0; i < componentToDisable.Length; i++)

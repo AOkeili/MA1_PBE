@@ -7,7 +7,8 @@ public class PlayerShoot : MonoBehaviour
     public PlayerWeapon weapon;
     public GameObject hitParticules;
 
-    [SerializeField] Camera cam;
+    // [SerializeField] Camera cam;
+    [SerializeField] Transform shootTarget;
     [SerializeField] LayerMask mask;
     [SerializeField] float fireRates = 0.1f;
     [SerializeField] Animator animator;
@@ -24,11 +25,11 @@ public class PlayerShoot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (cam == null)
+    /*    if (cam == null)
         {
             Debug.Log("No camera referenced");
             this.enabled = false;
-        }
+        }*/
         controls = new PlayerController();
         controls.Gameplay.Fire.performed += ctx => {
             if (bulletLeft > 0) Shoot();
@@ -36,7 +37,13 @@ public class PlayerShoot : MonoBehaviour
             bulletCount.text = "Bullet : " + bulletLeft;
 
         };
+        controls.Gameplay.TestKillEnemy.performed += ctx =>
+        {
+            Enemy enemy = GameObject.Find("EnemyRobot").GetComponent<Enemy>();
+            enemy.TakeDamage(1000);
+        };
         controls.Gameplay.Fire.Enable();
+        controls.Gameplay.TestKillEnemy.Enable();
         bulletLeft = bulletPerMag;
         audioSource = GetComponent<AudioSource>();
     }
@@ -64,9 +71,9 @@ public class PlayerShoot : MonoBehaviour
         if (shootTimer < fireRates || bulletLeft <= 0) return;
 
         RaycastHit hit;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, weapon.range, mask))
-        {
-            Debug.Log("Target Object : " + hit.collider.name);
+            if (Physics.Raycast(shootTarget.position, shootTarget.forward, out hit, weapon.range, mask))
+            {
+                Debug.Log("Target Object : " + hit.collider.name);
             if (hit.collider.CompareTag("Enemy"))
             {
                 Enemy enemy = hit.collider.GetComponent<Enemy>();

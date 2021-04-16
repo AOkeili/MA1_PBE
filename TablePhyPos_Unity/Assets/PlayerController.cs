@@ -57,6 +57,14 @@ public class @PlayerController : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""TestKillEnemy"",
+                    ""type"": ""Button"",
+                    ""id"": ""14dfdf76-4ffc-4fe7-b888-0811bccb3b4c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -75,6 +83,17 @@ public class @PlayerController : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""702e699d-8da1-4b97-af3f-de4502c580fd"",
                     ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e81efbb7-2277-43f7-aea9-2b9a686b7f7a"",
+                    ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -150,12 +169,45 @@ public class @PlayerController : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""4d92c567-828f-46c0-b41a-dc586e88f6a4"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""04bab676-eb07-4ff8-9a04-fbf269cb471b"",
                     ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""TestTakeDamage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""94f3b409-50f1-4261-baf4-9515bc12da3c"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TestTakeDamage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a1ba1665-653e-493e-b6f9-d1e0cc54bc41"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TestKillEnemy"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -171,6 +223,7 @@ public class @PlayerController : IInputActionCollection, IDisposable
         m_Gameplay_Fire = m_Gameplay.FindAction("Fire", throwIfNotFound: true);
         m_Gameplay_Kill = m_Gameplay.FindAction("Kill", throwIfNotFound: true);
         m_Gameplay_TestTakeDamage = m_Gameplay.FindAction("TestTakeDamage", throwIfNotFound: true);
+        m_Gameplay_TestKillEnemy = m_Gameplay.FindAction("TestKillEnemy", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -225,6 +278,7 @@ public class @PlayerController : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Fire;
     private readonly InputAction m_Gameplay_Kill;
     private readonly InputAction m_Gameplay_TestTakeDamage;
+    private readonly InputAction m_Gameplay_TestKillEnemy;
     public struct GameplayActions
     {
         private @PlayerController m_Wrapper;
@@ -234,6 +288,7 @@ public class @PlayerController : IInputActionCollection, IDisposable
         public InputAction @Fire => m_Wrapper.m_Gameplay_Fire;
         public InputAction @Kill => m_Wrapper.m_Gameplay_Kill;
         public InputAction @TestTakeDamage => m_Wrapper.m_Gameplay_TestTakeDamage;
+        public InputAction @TestKillEnemy => m_Wrapper.m_Gameplay_TestKillEnemy;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -258,6 +313,9 @@ public class @PlayerController : IInputActionCollection, IDisposable
                 @TestTakeDamage.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTestTakeDamage;
                 @TestTakeDamage.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTestTakeDamage;
                 @TestTakeDamage.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTestTakeDamage;
+                @TestKillEnemy.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTestKillEnemy;
+                @TestKillEnemy.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTestKillEnemy;
+                @TestKillEnemy.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTestKillEnemy;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -277,6 +335,9 @@ public class @PlayerController : IInputActionCollection, IDisposable
                 @TestTakeDamage.started += instance.OnTestTakeDamage;
                 @TestTakeDamage.performed += instance.OnTestTakeDamage;
                 @TestTakeDamage.canceled += instance.OnTestTakeDamage;
+                @TestKillEnemy.started += instance.OnTestKillEnemy;
+                @TestKillEnemy.performed += instance.OnTestKillEnemy;
+                @TestKillEnemy.canceled += instance.OnTestKillEnemy;
             }
         }
     }
@@ -288,5 +349,6 @@ public class @PlayerController : IInputActionCollection, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnKill(InputAction.CallbackContext context);
         void OnTestTakeDamage(InputAction.CallbackContext context);
+        void OnTestKillEnemy(InputAction.CallbackContext context);
     }
 }

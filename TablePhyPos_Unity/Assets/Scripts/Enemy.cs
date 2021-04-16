@@ -28,14 +28,18 @@ public class Enemy : MonoBehaviour
         
         Debug.Log(transform.name + " - " + currentHealth);
         bar.setHealthValue((float) currentHealth / (float) maxHealth);
-        if (currentHealth == 0) Die();
+        if (currentHealth == 0)
+        {
+            Animator animator = GetComponent<Animator>();
+            animator.SetTrigger("Die");
+        }
     }
     public bool isDead()
     {
         return _isDead;
     }
 
-    void Die()
+    public void Die()
     {
         _isDead = true;
         for (int i = 0; i < componentToDisable.Length; i++)
