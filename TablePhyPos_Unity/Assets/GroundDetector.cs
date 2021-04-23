@@ -24,11 +24,11 @@ public class GroundDetector : MonoBehaviour
         {
             isGrounded = true;
             savePos = transform.position;
-            SensorManager.Instance().SendWalkSensation(0.5f);
+            SensorManager.Instance().SendWalkSensation(0.3f);
             
         } else
         {
-            SensorManager.Instance().SendWalkSensation(0f);
+               SensorManager.Instance().SendWalkSensation(0f);
 
         }
     }
@@ -38,7 +38,7 @@ public class GroundDetector : MonoBehaviour
         if (other.CompareTag("Ground"))
         {
             isGrounded = false;
-            SensorManager.Instance().SendWalkSensation(0f);
+           SensorManager.Instance().SendWalkSensation(0f);
             Debug.Log("Exit");
         }
     }

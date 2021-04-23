@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     [SerializeField] Text healthData;
     [SerializeField] Behaviour[] componentToDisable;
     [SerializeField] Light cockpitLight;
-    [SerializeField] Image blackScreen;
+    [SerializeField] Image[] blackScreens;
 
     PlayerController inputActions;
 
@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
         inputActions = new PlayerController();
         inputActions.Gameplay.TestTakeDamage.started += ctx => { TakeDamage(100); };
         inputActions.Gameplay.TestTakeDamage.Enable();
-        blackScreen.canvasRenderer.SetAlpha(0f);
+        for(int i = 0; i < blackScreens.Length; i++) blackScreens[i].canvasRenderer.SetAlpha(0f);
         setDefault();
     }
 
@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
         float healthRatio = ((float)currentHealth / (float)maxHealth) * 100;
         healthData.text = "Shield : " + healthRatio + "%";
         if (currentHealth == 0) {
-            blackScreen.CrossFadeAlpha(1, 1, false);
+            for (int i = 0; i < blackScreens.Length; i++) blackScreens[i].CrossFadeAlpha(1, 1, false);
             Die();
                 };
     }

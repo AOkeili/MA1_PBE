@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.tablephypos_unity.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "D:\\ISIB\\MA1\\Q2\\Bureau etude\\Projet\\TablePhyPos_Unity\\Assets\\StreamingAssets\\SteamVR\\actions.json",
+      "action_manifest_path": "C:\\Users\\Irisib\\Desktop\\AOkeili_PBE\\TablePhyPos_Unity\\Assets\\StreamingAssets\\SteamVR\\actions.json",
       "strings": {
         "en_us": {
           "name": "TablePhyPos_Unity [Testing]"

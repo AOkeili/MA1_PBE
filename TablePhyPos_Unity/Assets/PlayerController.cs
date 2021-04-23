@@ -210,6 +210,17 @@ public class @PlayerController : IInputActionCollection, IDisposable
                     ""action"": ""TestKillEnemy"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b2be87fd-59be-472b-b569-be5c72d5d240"",
+                    ""path"": ""<HID::Logitech Logitech Extreme 3D>/button2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TestKillEnemy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
