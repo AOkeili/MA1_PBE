@@ -1,0 +1,5 @@
+-Force centrifuge quand rotation
+- Diminuer sensibiliter rotation
+- Ajouter les projectile quand tire
+- Essayer de cacher la barre du milieu de l'armature du cockpit
+- Rotation du siege selon le mouvement
