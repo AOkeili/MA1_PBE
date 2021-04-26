@@ -45,11 +45,23 @@ public class Player : MonoBehaviour
         Debug.Log(transform.name + " - " + currentHealth);
         float healthRatio = ((float)currentHealth / (float)maxHealth) * 100;
         healthData.text = "Shield : " + healthRatio + "%";
-        if (currentHealth == 0) {
+        if (currentHealth == 0)
+        {
             for (int i = 0; i < blackScreens.Length; i++) blackScreens[i].CrossFadeAlpha(1, 1, false);
             Die();
-                };
+        }
+        else {
+            SensorManager.Instance().SendHitSensation();
+        };
+
+        InvokeRepeating("EndHitSensation", 3,1);
     }
+
+    public void EndHitSensation()
+    {
+        SensorManager.Instance().EndHitSensation();
+    }
+
     public bool isDead()
     {
         return _isDead;

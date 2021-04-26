@@ -34,10 +34,10 @@ public class SensorManager : MonoBehaviour
     private float m_heave = 0;
 
     // Current platform's pitch in game
-    private float m_pitch = 0;
+    public float m_pitch = 0;
 
     // Current platform's roll in game
-    private float m_roll = 0;
+    public float m_roll = 0;
 
     // FSMI api
     private ForceSeatMI m_fsmi;
@@ -142,8 +142,44 @@ public class SensorManager : MonoBehaviour
         m_pitch = 0f;
     }
 
-    public void SendShootSensation() { }
+    public void SendShootSensation()
+    {
+        m_pitch = -1;
+    }
 
-    public void SendHitSensation() { }
+    public void EndShootSensation()
+    {
+        m_pitch = 0;
+    }
+
+    public void EndHitSensation()
+    {
+        m_heave = 0;
+    }
+
+    public void SendHitSensation() {
+        int rnd = Random.Range(0, 3);
+        Debug.Log("Call : " + rnd);
+        switch (rnd)
+        {
+            case 0:
+                m_heave = (m_heave == 0.03f && m_heave != 0.01f && m_heave != 0.02f) ? 0 : 0.03f;
+                break;
+            case 1:
+                m_heave = (m_heave == 0.01f && m_heave != 0.03f && m_heave != 0.02f) ? 0 : 0.01f;
+                break;
+            case 2:
+                m_heave = (m_heave == 0.02f && m_heave != 0.01f && m_heave != 0.03f) ? 0 : 0.02f;
+                break;
+        }
+    }
+
+    public void ResetSensation() {
+        
+        m_roll = 0;
+        m_pitch = 0;
+        m_heave = 0;
+      //  m_surge = 0;
+    }
 
 }
