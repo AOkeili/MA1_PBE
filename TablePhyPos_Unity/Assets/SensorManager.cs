@@ -1,5 +1,6 @@
 ﻿
 using MotionSystems;
+using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -39,8 +40,15 @@ public class SensorManager : MonoBehaviour
     // Current platform's roll in game
     public float m_roll = 0;
 
+    // Current platform's yaw in game
+    public float m_yaw = 0;
+
     // FSMI api
     private ForceSeatMI m_fsmi;
+
+    private float save_pitch = 0;
+    private bool isShooting = false;
+    private bool isRotating = false;
 
     // Position in physical coordinates that will be send to the platform
     private FSMI_TopTablePositionPhysical m_platformPosition = new FSMI_TopTablePositionPhysical();
@@ -86,6 +94,7 @@ public class SensorManager : MonoBehaviour
         m_platformPosition.state = FSMI_State.NO_PAUSE;
         m_platformPosition.roll = Mathf.Deg2Rad * m_roll;
         m_platformPosition.pitch = -Mathf.Deg2Rad * m_pitch;
+        m_platformPosition.yaw = -Mathf.Deg2Rad * m_yaw;
         m_platformPosition.heave = m_heave * 100;
 
         Debug.Log("roll: " + m_platformPosition.roll + ", pitch: " + m_platformPosition.pitch + "heav : " + m_platformPosition.heave);
@@ -126,7 +135,9 @@ public class SensorManager : MonoBehaviour
             Debug.LogError("ForceSeatMI library has not been found!Please install ForceSeatPM.");
         }
     }
-     void OnDestroy()
+
+
+    void OnDestroy()
     {
         if (m_fsmi.IsLoaded())
         {
@@ -139,26 +150,53 @@ public class SensorManager : MonoBehaviour
     {
         m_heave = Mathf.Clamp(vertical,0,DRAWING_HEAVE_MAX);
         m_roll = Mathf.Clamp(instance.m_platformPosition.roll - DRAWING_ROLL_STEP, DRAWING_ROLL_MIN, DRAWING_ROLL_MAX);
-        m_pitch = 0f;
+        m_pitch = -2f;
     }
 
     public void SendShootSensation()
     {
+        isShooting = true;
+       // if (m_pitch < -1) save_pitch = m_pitch;
         m_pitch = -1;
     }
 
     public void EndShootSensation()
     {
+        /* if (save_pitch != 0) {
+             m_pitch = save_pitch;
+             save_pitch = 0;
+         }
+         else */
+        isShooting = false;
         m_pitch = 0;
     }
 
     public void EndHitSensation()
     {
+    }
+
+    public void EndAcceleration()
+    {
+        if (isShooting) return;
+
         m_heave = 0;
+        m_pitch = 0;
+    }
+
+    public void SendRotateMotion(bool turnToRight)
+    {
+        isRotating = true;
+        m_yaw = turnToRight ? 1f : -1f;
+       
+    }
+
+    public void EndRotateMotion()
+    {
+        isRotating = false;
     }
 
     public void SendHitSensation() {
-        int rnd = Random.Range(0, 3);
+        int rnd = UnityEngine.Random.Range(0, 3);
         Debug.Log("Call : " + rnd);
         switch (rnd)
         {

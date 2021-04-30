@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Timers;
+using UnityEngine;
 
 [RequireComponent(typeof(PlayerMove))]
 public class PlayerControl : MonoBehaviour
@@ -9,13 +11,18 @@ public class PlayerControl : MonoBehaviour
 
     Vector2 playerMove;
     Vector2 playerRot;
+    Timer motionTimer;
     float horizontalMove;
+    int countStep;
 
     PlayerMove move;
     PlayerController controls;
 
     void Start()
     {
+        motionTimer = new Timer();
+        motionTimer.Interval = 850;
+        motionTimer.Elapsed += SendMotion;
         move = GetComponent<PlayerMove>();
         controls = new PlayerController();
        // controls.Gameplay.Fire.performed += ctx => KillPlayer();
@@ -45,15 +52,32 @@ public class PlayerControl : MonoBehaviour
     {
 
         //  float xMove = Input.GetAxis("Horizontal");
-        float xMove = playerMove.x;
-//        float zMove = Input.GetAxis("Vertical");
+        //float xMove = playerMove.x;
+        float xMove = 0;
+        //        float zMove = Input.GetAxis("Vertical");
         float zMove = playerMove.y;
-        Vector3 moveHorizontal = transform.right * xMove;
-        Vector3 moveVertical = transform.forward * zMove;
-        animator.SetFloat("ForwardVelocity", zMove);
-        animator.SetFloat("LateralVelocity", xMove);
+       // Vector3 moveHorizontal = xMove > 0.3f ? transform.right * xMove : Vector3.zero;
+        //Vector3 moveVertical = zMove > 0.3f ? transform.forward * zMove : Vector3.zero;
+        Vector3 moveHorizontal = xMove > 0.5f ? transform.right * speed : Vector3.zero;
+        Vector3 moveVertical = Math.Abs(zMove) > 0.5f ? transform.forward * speed * (zMove/ Math.Abs(zMove)) : Vector3.zero;
 
-        Vector3 velocity = (moveHorizontal + moveVertical) * speed;
+        if (Math.Abs(zMove) > 0.5f) { 
+            motionTimer.Enabled = true;
+
+            animator.SetFloat("ForwardVelocity", zMove);
+            animator.SetFloat("LateralVelocity", xMove);
+        } else
+        {
+            motionTimer.Enabled = false;
+
+            animator.SetFloat("ForwardVelocity", 0);
+            animator.SetFloat("LateralVelocity", 0);
+            countStep = 0;
+            SensorManager.Instance().EndAcceleration();
+
+        }
+        //Vector3 velocity = (moveHorizontal + moveVertical) * speed;
+        Vector3 velocity = (moveHorizontal + moveVertical) * Time.deltaTime;
         move.SetVelocity(velocity);
     }
 
@@ -62,6 +86,8 @@ public class PlayerControl : MonoBehaviour
         // float horizontalRotation = Input.GetAxisRaw("Mouse X");
         float horizontalRotation = playerRot.x;
         Vector3 rotation = new Vector3(0, horizontalRotation, 0) * lookSensitivity;
+        SensorManager.Instance().SendRotateMotion(rotation.y > 0);
+        if (horizontalRotation == 0) SensorManager.Instance().EndRotateMotion();
         move.SetRotation(rotation);
     }
 
@@ -71,4 +97,13 @@ public class PlayerControl : MonoBehaviour
             Player p = GetComponent<Player>();
             p.TakeDamage(9999);
     }
+
+
+    void SendMotion(object sender, ElapsedEventArgs e)
+    {
+        float stepValue = (countStep % 2) == 0 ? 0 : 0.4f;
+        SensorManager.Instance().SendWalkSensation(stepValue);
+        countStep++;
+    }
+    
 }
