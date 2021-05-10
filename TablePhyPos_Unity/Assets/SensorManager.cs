@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class SensorManager : MonoBehaviour
 {
-    private const float DRAWING_HEAVE_MAX = 1.0f;
+    private const float DRAWING_HEAVE_MAX = 0.7f;
+
+    private const float DRAWING_HEAVE_MIN = 0.2f;
 
     // Heave change step
     private const float DRAWING_HEAVE_STEP = 0.05f;
@@ -49,6 +51,7 @@ public class SensorManager : MonoBehaviour
     private float save_pitch = 0;
     private bool isShooting = false;
     private bool isRotating = false;
+    System.Random r;
 
     // Position in physical coordinates that will be send to the platform
     private FSMI_TopTablePositionPhysical m_platformPosition = new FSMI_TopTablePositionPhysical();
@@ -59,7 +62,7 @@ public class SensorManager : MonoBehaviour
         instance = this;
         // Load ForceSeatMI library from ForceSeatPM installation directory
         m_fsmi = new ForceSeatMI();
-
+        r = new System.Random();
         if (m_fsmi.IsLoaded())
         {
          
@@ -86,6 +89,7 @@ public class SensorManager : MonoBehaviour
     void Update()
     {
         SendDataToPlatform();
+        if (m_heave != 0) m_heave = 0;
     }
 
     void SendDataToPlatform()
@@ -146,11 +150,14 @@ public class SensorManager : MonoBehaviour
         }
     }
 
-    public void SendWalkSensation(float vertical)
+    public void SendWalkSensation()
     {
-        m_heave = Mathf.Clamp(vertical,0,DRAWING_HEAVE_MAX);
+        
+        m_heave = (float)r.NextDouble() ;
+        Debug.Log(m_heave);
+        m_heave = Mathf.Clamp(m_heave,DRAWING_HEAVE_MIN,DRAWING_HEAVE_MAX);
         m_roll = Mathf.Clamp(instance.m_platformPosition.roll - DRAWING_ROLL_STEP, DRAWING_ROLL_MIN, DRAWING_ROLL_MAX);
-        m_pitch = -2f;
+        m_pitch = -0.7f;
     }
 
     public void SendShootSensation()
@@ -173,6 +180,8 @@ public class SensorManager : MonoBehaviour
 
     public void EndHitSensation()
     {
+      //  isHit = false;
+
     }
 
     public void EndAcceleration()
@@ -196,20 +205,8 @@ public class SensorManager : MonoBehaviour
     }
 
     public void SendHitSensation() {
-        int rnd = UnityEngine.Random.Range(0, 3);
-        Debug.Log("Call : " + rnd);
-        switch (rnd)
-        {
-            case 0:
-                m_heave = (m_heave == 0.03f && m_heave != 0.01f && m_heave != 0.02f) ? 0 : 0.03f;
-                break;
-            case 1:
-                m_heave = (m_heave == 0.01f && m_heave != 0.03f && m_heave != 0.02f) ? 0 : 0.01f;
-                break;
-            case 2:
-                m_heave = (m_heave == 0.02f && m_heave != 0.01f && m_heave != 0.03f) ? 0 : 0.02f;
-                break;
-        }
+        m_pitch = -1f;
+
     }
 
     public void ResetSensation() {

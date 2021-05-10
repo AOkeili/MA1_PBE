@@ -202,6 +202,17 @@ public class @PlayerController : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""eff61960-5eeb-4e26-983a-8bac557405f6"",
+                    ""path"": ""<HID::Logitech Logitech Extreme 3D>/button3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TestTakeDamage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""a1ba1665-653e-493e-b6f9-d1e0cc54bc41"",
                     ""path"": ""<Keyboard>/k"",
                     ""interactions"": """",

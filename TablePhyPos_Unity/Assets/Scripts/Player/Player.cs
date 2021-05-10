@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
             componentWasEnable[i] = componentToDisable[i].enabled;
         }
         inputActions = new PlayerController();
-        inputActions.Gameplay.TestTakeDamage.started += ctx => { TakeDamage(100); };
+        inputActions.Gameplay.TestTakeDamage.started += ctx => { TakeDamage(10); };
         inputActions.Gameplay.TestTakeDamage.Enable();
         for(int i = 0; i < blackScreens.Length; i++) blackScreens[i].canvasRenderer.SetAlpha(0f);
         setDefault();

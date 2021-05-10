@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Timers;
 using UnityEngine;
+using Random = System.Random;
 
 [RequireComponent(typeof(PlayerMove))]
 public class PlayerControl : MonoBehaviour
@@ -8,20 +9,25 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float lookSensitivity;
     [SerializeField] Animator animator;
+    [SerializeField] Transform cockpit;
 
     Vector2 playerMove;
     Vector2 playerRot;
+    Vector3 cockpitOriginPos;
     Timer motionTimer;
     float horizontalMove;
     int countStep;
-
+    
     PlayerMove move;
     PlayerController controls;
+
+    public bool isWalking = false;
+
 
     void Start()
     {
         motionTimer = new Timer();
-        motionTimer.Interval = 850;
+        motionTimer.Interval = 650; //850
         motionTimer.Elapsed += SendMotion;
         move = GetComponent<PlayerMove>();
         controls = new PlayerController();
@@ -32,6 +38,7 @@ public class PlayerControl : MonoBehaviour
         controls.Gameplay.Rotate.Enable();
         controls.Gameplay.Forward.canceled += ctx => playerMove = Vector2.zero;
         controls.Gameplay.Rotate.canceled += ctx => playerRot = Vector2.zero;
+        cockpitOriginPos = cockpit.transform.localPosition;
     }
 
     void Update()
@@ -63,16 +70,19 @@ public class PlayerControl : MonoBehaviour
 
         if (Math.Abs(zMove) > 0.5f) { 
             motionTimer.Enabled = true;
-
+            isWalking = true;
             animator.SetFloat("ForwardVelocity", zMove);
             animator.SetFloat("LateralVelocity", xMove);
-        } else
-        {
-            motionTimer.Enabled = false;
+            Debug.Log("Moving");
 
+        }
+        else
+        {
+            Debug.Log("Not Moving");
+            motionTimer.Enabled = false;
+            isWalking = false;
             animator.SetFloat("ForwardVelocity", 0);
             animator.SetFloat("LateralVelocity", 0);
-            countStep = 0;
             SensorManager.Instance().EndAcceleration();
 
         }
@@ -101,9 +111,11 @@ public class PlayerControl : MonoBehaviour
 
     void SendMotion(object sender, ElapsedEventArgs e)
     {
-        float stepValue = (countStep % 2) == 0 ? 0 : 0.4f;
-        SensorManager.Instance().SendWalkSensation(stepValue);
-        countStep++;
+        if (!isWalking) countStep = 0;
+       // float stepValue = (countStep % 2) == 0 ? 0 : 0.4f;
+       // Debug.Log("StepVal = " + stepValue);
+        SensorManager.Instance().SendWalkSensation();
+        countStep = (countStep + 1) % 10;
     }
     
 }
