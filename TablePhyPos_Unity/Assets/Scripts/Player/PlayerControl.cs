@@ -83,7 +83,7 @@ public class PlayerControl : MonoBehaviour
             isWalking = false;
             animator.SetFloat("ForwardVelocity", 0);
             animator.SetFloat("LateralVelocity", 0);
-            SensorManager.Instance().EndAcceleration();
+        //    SensorManager.Instance().EndAcceleration();
 
         }
         //Vector3 velocity = (moveHorizontal + moveVertical) * speed;
@@ -114,9 +114,7 @@ public class PlayerControl : MonoBehaviour
     void SendMotion(object sender, ElapsedEventArgs e)
     {
         if (!isWalking) countStep = 0;
-       // float stepValue = (countStep % 2) == 0 ? 0 : 0.4f;
-       // Debug.Log("StepVal = " + stepValue);
-        SensorManager.Instance().SendWalkSensation();
+      //  SensorManager.Instance().SendWalkSensation();
         countStep = (countStep + 1) % 10;
 
         float stepValue = (countStep % 2) == 0 ? 0 : 0.4f;
