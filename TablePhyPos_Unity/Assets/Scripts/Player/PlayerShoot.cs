@@ -16,6 +16,8 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] AudioClip shootSound;
     [SerializeField] Text bulletCount;
 
+    [SerializeField] GameObject projectile;
+
     PlayerController controls;
     AudioSource audioSource;
     int bulletPerMag = 1;
@@ -70,10 +72,12 @@ public class PlayerShoot : MonoBehaviour
     {
         if (shootTimer < fireRates || bulletLeft <= 0) return;
 
+        GameObject tmpProjectile = Instantiate(projectile, shootTarget.position, Quaternion.LookRotation(shootTarget.forward));
+
         RaycastHit hit;
-            if (Physics.Raycast(shootTarget.position, shootTarget.forward, out hit, weapon.range, mask))
-            {
-                Debug.Log("Target Object : " + hit.collider.name);
+        if (Physics.Raycast(shootTarget.position, shootTarget.forward, out hit, weapon.range, mask))
+        {
+            Debug.Log("Target Object : " + hit.collider.name);
             if (hit.collider.CompareTag("Enemy"))
             {
                 Enemy enemy = hit.collider.GetComponent<Enemy>();
@@ -82,6 +86,7 @@ public class PlayerShoot : MonoBehaviour
             GameObject hitParticleEffect = Instantiate(hitParticules, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
             Destroy(hitParticleEffect, 1f);
         }
+
         bulletLeft--;
         fireShoot.Play();
         PlayShootSound();

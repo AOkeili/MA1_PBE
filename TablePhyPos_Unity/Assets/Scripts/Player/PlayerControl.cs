@@ -96,8 +96,10 @@ public class PlayerControl : MonoBehaviour
         // float horizontalRotation = Input.GetAxisRaw("Mouse X");
         float horizontalRotation = playerRot.x;
         Vector3 rotation = new Vector3(0, horizontalRotation, 0) * lookSensitivity;
-        SensorManager.Instance().SendRotateMotion(rotation.y > 0);
-        if (horizontalRotation == 0) SensorManager.Instance().EndRotateMotion();
+
+        //---------------------------------------------  SensorManager.Instance().SendRotateMotion(rotation.y > 0);
+
+        //---------------------------------------------if (horizontalRotation == 0) SensorManager.Instance().EndRotateMotion();
         move.SetRotation(rotation);
     }
 
@@ -116,6 +118,8 @@ public class PlayerControl : MonoBehaviour
        // Debug.Log("StepVal = " + stepValue);
         SensorManager.Instance().SendWalkSensation();
         countStep = (countStep + 1) % 10;
+
+        float stepValue = (countStep % 2) == 0 ? 0 : 0.4f;
     }
     
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] bool _isDead = false;
     [SerializeField] HealthBar bar;
     [SerializeField] Behaviour[] componentToDisable;
+    [SerializeField] NavMeshAgent navMesh;
 
     bool[] componentWasEnable;
 
@@ -46,8 +48,9 @@ public class Enemy : MonoBehaviour
         {
             componentToDisable[i].enabled = false;
         }
-        Collider col = GetComponent<Collider>();
-        if (col != null) col.enabled = true;
+      
+            Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
     }
 
     public void setDefault()
