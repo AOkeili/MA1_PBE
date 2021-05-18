@@ -17,6 +17,8 @@ public class EnemyAttack : MonoBehaviour
     [SerializeField] float fireRates = 0.1f;
     [SerializeField] ParticleSystem fireShoot;
     [SerializeField] AudioClip shootSound;
+    [SerializeField] GameObject projectile;
+
 
     AudioSource audioSource;
     int bulletPerMag = 1;
@@ -34,6 +36,7 @@ public class EnemyAttack : MonoBehaviour
     public void Shoot()
     {  
         RaycastHit hit;
+        GameObject tmpProjectile = Instantiate(projectile, enemyEyes.transform.position, Quaternion.LookRotation(enemyEyes.transform.forward));
         if (Physics.Raycast(enemyEyes.transform.position, enemyEyes.transform.forward, out hit, currentAttack.maximumDistanceNeededToAttack, mask))
         {
            Debug.Log("Target Object : " + hit.collider.name);
