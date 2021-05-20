@@ -6,6 +6,8 @@ using Random = System.Random;
 [RequireComponent(typeof(PlayerMove))]
 public class PlayerControl : MonoBehaviour
 {
+    const string AUDIO_WALKSFX = "walkSFX";
+
     [SerializeField] float speed;
     [SerializeField] float lookSensitivity;
     [SerializeField] Animator animator;
@@ -78,6 +80,7 @@ public class PlayerControl : MonoBehaviour
         }
         else
         {
+            FindObjectOfType<AudioManager>().Play(AUDIO_WALKSFX);
             Debug.Log("Not Moving");
             motionTimer.Enabled = false;
             isWalking = false;
@@ -113,6 +116,7 @@ public class PlayerControl : MonoBehaviour
 
     void SendMotion(object sender, ElapsedEventArgs e)
     {
+        FindObjectOfType<AudioManager>().Play(AUDIO_WALKSFX);
         if (!isWalking) countStep = 0;
       //  SensorManager.Instance().SendWalkSensation();
         countStep = (countStep + 1) % 10;

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class PlayerShoot : MonoBehaviour
 {
+    const string AUDIO_SHOOTSFX = "shootSFX";
 
     public PlayerWeapon weapon;
     public GameObject hitParticules;
@@ -89,7 +90,8 @@ public class PlayerShoot : MonoBehaviour
 
         bulletLeft--;
         fireShoot.Play();
-        PlayShootSound();
+        //    PlayShootSound();
+        FindObjectOfType<AudioManager>().Play(AUDIO_SHOOTSFX);
         animator.CrossFadeInFixedTime("Fire", 0.1f);
         shootTimer = 0f;
     }

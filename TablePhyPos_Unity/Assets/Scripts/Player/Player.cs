@@ -3,6 +3,9 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    const string AUDIO_BGM = "bgm";
+    const string AUDIO_FIRESFX = "blazeSFX";
+
     [SerializeField] int maxHealth = 100;
     [SerializeField] int currentHealth = 0;
     [SerializeField] bool _isDead = false;
@@ -27,6 +30,9 @@ public class Player : MonoBehaviour
         inputActions.Gameplay.TestTakeDamage.Enable();
         for(int i = 0; i < blackScreens.Length; i++) blackScreens[i].canvasRenderer.SetAlpha(0f);
         setDefault();
+
+        FindObjectOfType<AudioManager>().Play(AUDIO_BGM);
+        FindObjectOfType<AudioManager>().Play(AUDIO_FIRESFX);
     }
 
 
