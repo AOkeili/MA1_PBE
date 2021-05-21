@@ -9,7 +9,7 @@ public class DeathState : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         NavMeshAgent navmesh = animator.GetComponent<NavMeshAgent>();
-        navmesh.isStopped = true;
+       navmesh.isStopped = true;
         navmesh.velocity = Vector3.zero;
     }
 

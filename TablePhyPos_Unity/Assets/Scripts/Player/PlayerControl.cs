@@ -9,17 +9,19 @@ public class PlayerControl : MonoBehaviour
     const string AUDIO_WALKSFX = "walkSFX";
 
     [SerializeField] float speed;
+    [SerializeField] float bobbing;
     [SerializeField] float lookSensitivity;
     [SerializeField] Animator animator;
     [SerializeField] Transform cockpit;
+    [SerializeField] [Range(0f,4f)] float lerpIntensity;
 
     Vector2 playerMove;
     Vector2 playerRot;
     Vector3 cockpitOriginPos;
     Timer motionTimer;
     float horizontalMove;
-    int countStep;
-    
+    float timeElapsed;
+
     PlayerMove move;
     PlayerController controls;
 
@@ -33,7 +35,6 @@ public class PlayerControl : MonoBehaviour
         motionTimer.Elapsed += SendMotion;
         move = GetComponent<PlayerMove>();
         controls = new PlayerController();
-       // controls.Gameplay.Fire.performed += ctx => KillPlayer();
         controls.Gameplay.Rotate.performed += ctx => playerRot = ctx.ReadValue<Vector2>();
         controls.Gameplay.Forward.performed += ctx => playerMove = ctx.ReadValue<Vector2>();
         controls.Gameplay.Forward.Enable();
@@ -45,32 +46,19 @@ public class PlayerControl : MonoBehaviour
 
     void Update()
     {
-        //Test Death
-       /* if (Input.GetKeyDown(KeyCode.K))
-        if()
-        {
-            Player p = GetComponent<Player>();
-            p.TakeDamage(9999);
-        }*/
-
         ComputeMovement();
         ComputeRotation();
     }
 
     void ComputeMovement()
     {
-
-        //  float xMove = Input.GetAxis("Horizontal");
-        //float xMove = playerMove.x;
         float xMove = 0;
-        //        float zMove = Input.GetAxis("Vertical");
         float zMove = playerMove.y;
-       // Vector3 moveHorizontal = xMove > 0.3f ? transform.right * xMove : Vector3.zero;
-        //Vector3 moveVertical = zMove > 0.3f ? transform.forward * zMove : Vector3.zero;
         Vector3 moveHorizontal = xMove > 0.5f ? transform.right * speed : Vector3.zero;
-        Vector3 moveVertical = Math.Abs(zMove) > 0.5f ? transform.forward * speed * (zMove/ Math.Abs(zMove)) : Vector3.zero;
+        Vector3 moveVertical = Math.Abs(zMove) > 0.5f ? transform.forward * speed * (zMove / Math.Abs(zMove)) : Vector3.zero;
 
-        if (Math.Abs(zMove) > 0.5f) { 
+        if (Math.Abs(zMove) > 0.5f)
+        {
             motionTimer.Enabled = true;
             isWalking = true;
             animator.SetFloat("ForwardVelocity", zMove);
@@ -86,11 +74,12 @@ public class PlayerControl : MonoBehaviour
             isWalking = false;
             animator.SetFloat("ForwardVelocity", 0);
             animator.SetFloat("LateralVelocity", 0);
-        //    SensorManager.Instance().EndAcceleration();
+            SensorManager.Instance().EndAcceleration();
 
         }
         //Vector3 velocity = (moveHorizontal + moveVertical) * speed;
         Vector3 velocity = (moveHorizontal + moveVertical) * Time.deltaTime;
+       
         move.SetVelocity(velocity);
     }
 
@@ -108,20 +97,17 @@ public class PlayerControl : MonoBehaviour
 
     void KillPlayer()
     {
-        
-            Player p = GetComponent<Player>();
-            p.TakeDamage(9999);
+
+        Player p = GetComponent<Player>();
+        p.TakeDamage(9999);
     }
 
 
     void SendMotion(object sender, ElapsedEventArgs e)
     {
-        FindObjectOfType<AudioManager>().Play(AUDIO_WALKSFX);
-        if (!isWalking) countStep = 0;
-      //  SensorManager.Instance().SendWalkSensation();
-        countStep = (countStep + 1) % 10;
-
-        float stepValue = (countStep % 2) == 0 ? 0 : 0.4f;
+        //  FindObjectOfType<AudioManager>().Play(AUDIO_WALKSFX);
+        SensorManager.Instance().SendWalkSensation();
+        Debug.Log("I walk");
     }
-    
+
 }

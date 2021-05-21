@@ -114,7 +114,7 @@ public class @PlayerController : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""846ca3f3-c971-43ac-a991-17665fed1c71"",
+                    ""id"": ""cc73706f-63c8-4242-ad97-007a09fd071d"",
                     ""path"": ""<Joystick>/stick"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -125,8 +125,8 @@ public class @PlayerController : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""0ebd2a90-ebeb-4e9a-b569-c50b08776d03"",
-                    ""path"": ""<Gamepad>/leftStick"",
+                    ""id"": ""80df531c-446c-48d0-acbc-597dbc8adf4e"",
+                    ""path"": ""<HID::Logitech Logitech Extreme 3D>/stick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
