@@ -8,7 +8,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] bool _isDead = false;
     [SerializeField] HealthBar bar;
     [SerializeField] Behaviour[] componentToDisable;
-    [SerializeField] NavMeshAgent navMesh;
 
     bool[] componentWasEnable;
 
@@ -28,17 +27,12 @@ public class Enemy : MonoBehaviour
         if (_isDead) return;
         currentHealth = Mathf.Max(currentHealth - damage, 0);
         
-        Debug.Log(transform.name + " - " + currentHealth);
         bar.setHealthValue((float) currentHealth / (float) maxHealth);
         if (currentHealth == 0)
         {
             Animator animator = GetComponent<Animator>();
             animator.SetTrigger("Die");
         }
-    }
-    public bool isDead()
-    {
-        return _isDead;
     }
 
     public void Die()
@@ -48,8 +42,8 @@ public class Enemy : MonoBehaviour
         {
             componentToDisable[i].enabled = false;
         }
-      
-            Collider col = GetComponent<Collider>();
+
+        Collider col = GetComponent<Collider>();
         if (col != null) col.enabled = false;
     }
 

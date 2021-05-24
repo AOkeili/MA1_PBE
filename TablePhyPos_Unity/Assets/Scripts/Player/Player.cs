@@ -48,7 +48,6 @@ public class Player : MonoBehaviour
     {
         if (_isDead) return;
         currentHealth = Mathf.Max(currentHealth - damage, 0);
-        Debug.Log(transform.name + " - " + currentHealth);
         float healthRatio = ((float)currentHealth / (float)maxHealth) * 100;
         healthData.text = "Shield : " + healthRatio + "%";
         if (currentHealth == 0)
@@ -59,13 +58,6 @@ public class Player : MonoBehaviour
         else {
             SensorManager.Instance().SendHitSensation();
         };
-
-        InvokeRepeating("EndHitSensation", 3,1);
-    }
-
-    public void EndHitSensation()
-    {
-        SensorManager.Instance().EndHitSensation();
     }
 
     public bool isDead()
