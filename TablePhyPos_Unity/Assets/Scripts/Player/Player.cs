@@ -72,6 +72,7 @@ public class Player : MonoBehaviour
         {
             componentToDisable[i].enabled = false;
         }
+        Destroy(GameObject.Find("FloorVFX").gameObject);
         Collider col = GetComponent<Collider>();
         if (col != null) col.enabled = true;
     }

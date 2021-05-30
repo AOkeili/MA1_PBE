@@ -69,7 +69,6 @@ public class PlayerControl : MonoBehaviour
 
         }
         Vector3 velocity = (moveHorizontal + moveVertical) * speed;
-       // Vector3 velocity = (moveHorizontal + moveVertical) * Time.deltaTime;
        
         move.SetVelocity(velocity);
     }
